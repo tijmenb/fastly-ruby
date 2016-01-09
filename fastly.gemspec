@@ -1,19 +1,28 @@
-# -*- encoding: utf-8 -*-
-$LOAD_PATH.push File.expand_path('../lib', __FILE__)
-require 'fastly/gem_version'
+# coding: utf-8
+lib = File.expand_path('../lib', __FILE__)
+$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+require 'fastly/version'
 
-Gem::Specification.new do |s|
-  s.name        = 'fastly'
-  s.version     = Fastly::VERSION
-  s.authors     = ['Fastly']
-  s.email       = ['simon@fastly.com', 'zeke@templ.in', 'tyler@fastly.com']
-  s.homepage    = 'http://github.com/fastly/fastly-ruby'
-  s.summary     = %q(Client library for the Fastly acceleration system)
-  s.description = %q(Client library for the Fastly acceleration system)
-  s.license     = 'MIT'
+Gem::Specification.new do |spec|
+  spec.name          = "fastly"
+  spec.version       = Fastly::VERSION
+  spec.authors       = ["Josh Lane"]
+  spec.email         = ["jlane@fastly.com"]
 
-  s.files         = `git ls-files`.split("\n")
-  s.test_files    = `git ls-files -- test/*`.split("\n")
-  s.executables   = `git ls-files -- bin/*`.split("\n").map { |f| File.basename(f) }
-  s.require_paths = ['lib']
+  spec.summary       = %q{Client library for the Fastly acceleration system}
+  spec.description   = %q{Client library for the Fastly acceleration system}
+  spec.homepage      = "https://github.com/fastly/fastly-ruby"
+  spec.license       = "MIT"
+
+  spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
+  spec.bindir        = "bin"
+  spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
+  spec.require_paths = ["lib"]
+
+  spec.add_development_dependency "bundler", "~> 1.11"
+  spec.add_development_dependency "rake", "~> 10.0"
+  spec.add_development_dependency "minitest", "~> 5.0"
+
+  spec.add_dependency "cistern", "~> 2.1"
+  spec.add_dependency "faraday", "~> 0.9"
 end

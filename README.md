@@ -1,197 +1,41 @@
-# Fastly [![Build Status](https://travis-ci.org/fastly/fastly-ruby.svg?branch=master)](https://travis-ci.org/fastly/fastly-ruby)
+# Fastly
 
-Client library for interacting with the Fastly web acceleration service [API](http://docs.fastly.com/api)
+Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/fastly`. To experiment with that code, run `bin/console` for an interactive prompt.
 
-## Examples
+TODO: Delete this and the text above, and describe your gem
 
-Add fastly to your Gemfile:
+## Installation
+
+Add this line to your application's Gemfile:
+
 ```ruby
 gem 'fastly'
 ```
 
-Create a fastly client:
+And then execute:
 
-```ruby
-# some_file.rb
-# use {api_key: 'your-key'} or {user: 'username', password: 'password'} as login options
-fastly = Fastly.new(login_opts)
+    $ bundle
 
-current_user     = fastly.current_user
-current_customer = fastly.current_customer
+Or install it yourself as:
 
-user     = fastly.get_user(current_user.id)
-customer = fastly.get_customer(current_customer.id)
+    $ gem install fastly
 
-puts "Name: #{user.name}"
-puts "Works for #{user.customer.name}"
-puts "Which is the same as #{customer.name}"
-puts "Which has the owner #{customer.owner.name}"
-```
+## Usage
 
-List the services we have defined:
+TODO: Write usage instructions here
 
-```ruby
-fastly.list_services.each do |service|
-  puts "Service ID: #{service.id}"
-  puts "Service Name: #{service.name}"
-  puts "Service Versions:"
-  service.versions.each do |version|
-    puts "\t#{version.number}"
-  end
-end
+## Development
 
-service        = fastly.create_service(name: "MyFirstService")
-latest_version = service.version
-```
+After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
 
-Create a domain and a backend for the service:
-
-```ruby
-domain =
-  fastly.create_domain(service_id: service.id,
-                       version: latest_version.number,
-                       name: "www.example.com")
-
-backend =
-  fastly.create_backend(service_id: service.id,
-                        version: latest_version.number,
-                        name: "Backend 1",
-                        ipv4: "192.0.43.10",
-                        port: 80)
-```
-
-Activate the service:
-
-```ruby
-latest_version.activate!
-```
-
-You're now hosted on Fastly.
-
-Let's look at the VCL that Fastly generated for us:
-
-```ruby
-vcl = latest_version.generated_vcl
-
-puts "Generated VCL file is:"
-puts vcl.content
-```
-
-Now let's create a new version:
-
-```ruby
-new_version = latest_version.clone
-```
-
-Add a new backend:
-
-```ruby
-new_backend =
-  fastly.create_backend(service_id: service.id,
-                        version: new_version.number,
-                        name: "Backend 2",
-                        ipv4: "74.125.224.136",
-                        port: 8080)
-```
-
-Add a director to switch between them:
-
-```ruby
-director =
-  fastly.create_director(service_id: service.id,
-                         version: new_version.number,
-                         name: "My Director")
-
-director.add_backend(backend)
-director.add_backend(new_backend)
-```
-
-Upload some custom VCL (presuming we have permissions):
-
-```ruby
-custom_vcl = File.read(vcl_file)
-
-new_version.upload_vcl(vcl_name, custom_vcl)
-```
-
-Set the custom VCL as the service's main VCL
-
-```ruby
-new_version.vcl(vcl_name).set_main!
-
-new_version.activate!
-```
-
-### Efficient purging
-
-Purging requires your Fastly credentials and the service you want to purge
-content from.  To purge efficiently you do not want to look up the service
-every time you issue a purge:
-
-```ruby
-fastly  = Fastly.new(api_key: 'YOUR_API_KEY')
-service = Fastly::Service.new({ id: 'YOUR_SERVICE_ID' }, fastly)
-
-# purge everything:
-service.purge_all
-
-# purge by key:
-service.purge_by_key('YOUR_SURROGATE_KEY')
-```
-
-You can also purge without involving the Fastly client at all by sending a POST
-request with your Fastly API key in a `Fastly-Key` header:
-
-```
-curl -H 'Fastly-Key: YOUR_API_KEY' -X POST \
-  https://api.fastly.com/service/YOUR_SERVICE_ID/purge/YOUR_SURROGATE_KEY
-```
-
-See the [Fastly purging API documentation](https://docs.fastly.com/api/purge)
-for more information and examples.
-
-## Usage notes
-
-If you are performing many purges per second we recommend you use the API
-directly with an HTTP client of your choice.  See Efficient Purging above.
-
-fastly-ruby has not been audited for thread-safety.  If you are performing
-actions that require multiple threads (such as performing many purges) we
-recommend you use the API directly.
+To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
 
 ## Contributing
 
-1. Fork it
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Added some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create new Pull Request
+Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/fastly. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
 
-### Notes for testing
 
-The test suite requires the following `ENV` variables to be set:
+## License
 
-* `FASTLY_TEST_USER` - Your user email
-* `FASTLY_TEST_PASSWORD` - Your account password
-* `FASTLY_TEST_API_KEY` - Your API key (found at https://app.fastly.com/#account)
+The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
 
-While the test suite is safe to be run on all accounts and isn't harmful to your
-data, the tests will create and delete 3 services in sequence so you may want
-to create an account just for tests.
-
-## Copyright
-
-Copyright 2011-2014 - Fastly Inc
-
-## Redistribution
-
-MIT license, see LICENSE.
-
-## Contact
-
-Mail support at fastly dot com if you have problems.
-
-## Developers
-
-* http://github.com/fastly/fastly-ruby
-* http://www.fastly.com/documentation
