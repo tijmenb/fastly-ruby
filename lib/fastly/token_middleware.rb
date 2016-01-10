@@ -1,11 +1,13 @@
-class Fastly::TokenMiddleware
+class Fastly::TokenMiddleware < Faraday::Middleware
   def initialize(app, token)
-    @app, @token = app, token
+    super(app)
+
+    @token = token
   end
 
   def call(request_env)
     request_env[:request_headers].merge!("Fastly-Key" => @token)
 
-    @app.call(request_env).on_complete { |response_env|  }
+    @app.call(request_env)
   end
 end

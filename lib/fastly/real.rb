@@ -14,6 +14,7 @@ class Fastly::Real
       @via = :session
     end
 
+    @url ||= "https://api.fastly.com"
     @adapter ||= Faraday.default_adapter
 
     @connection = Faraday.new(url: url) do |connection|
@@ -27,7 +28,7 @@ class Fastly::Real
       if via == :session
         connection.use :cookie_jar
       else
-        connection.use Fastly::TokenMiddleware
+        connection.use Fastly::TokenMiddleware, token
       end
 
       # idempotency
@@ -38,7 +39,7 @@ class Fastly::Real
         :backoff_factor      => 2
 
       if logger
-        connection.use :detailed_logger, logger
+        connection.response :detailed_logger, logger
       end
 
       connection.adapter(*adapter)
@@ -46,14 +47,17 @@ class Fastly::Real
   end
 
   def request(options={})
-    method  = options[:method] || :get
-    url     = options[:url] || File.join(@url, "/api/v2", options[:path])
-    params  = options[:params] || {}
-    body    = options[:body]
-    headers = {"User-Agent" => Fastly::USER_AGENT}.merge(options[:headers] || {})
+    method      = options[:method] || :get
+    request_url = File.join(url, options.fetch(:path))
+    params      = options[:params] || {}
+    body        = options[:body]
+    headers     = {
+      "User-Agent" => Fastly::USER_AGENT,
+      "Accept"     => "application/json"
+    }.merge(options[:headers] || {})
 
     connection.send(method) do |req|
-      req.url(url)
+      req.url(request_url)
       req.headers.merge!(headers)
       req.params.merge!(params)
       req.body = body
