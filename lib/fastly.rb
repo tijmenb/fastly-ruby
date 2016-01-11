@@ -19,7 +19,7 @@ require "fastly/request"
 
 require "fastly/customer"
 require "fastly/customers"
-#require "fastly/get_customer"
+require "fastly/get_customer"
 require "fastly/get_current_customer"
 
 require "fastly/real"

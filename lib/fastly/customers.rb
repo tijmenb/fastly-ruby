@@ -8,7 +8,7 @@ class Fastly::Customers < Fastly::Collection
 
   def current
     new(
-      service.get_current_customer(identity).body
+      service.get_current_customer.body
     )
   end
 

@@ -15,19 +15,35 @@ class Fastly::Request
     @request_path ||= block
   end
 
-  attr_reader :params
-
-  def setup(params)
-    @params = Cistern::Hash.stringify_keys(params)
+  def self.parameters
+    @parameters ||= []
   end
 
-  def _mock(params={})
-    setup(params)
+  def self.parameter(name)
+    parameters << name
+
+    attr_reader name
+  end
+
+  attr_reader :params
+
+  def setup(*args)
+    if args.size > self.class.parameters.size
+      raise ArgumentError, "too many arguments for parameters: #{self.class.parameters}"
+    end
+
+    args.each_with_index { |arg, i|
+      instance_variable_set("@#{self.class.parameters[i]}", arg)
+    }
+  end
+
+  def _mock(*args)
+    setup(*args)
     mock
   end
 
-  def _real(params={})
-    setup(params)
+  def _real(*args)
+    setup(*args)
     real
   end
 

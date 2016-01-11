@@ -10,4 +10,8 @@ describe "Users" do
       assert_not_nil client.customers.current.identity
     end
   end
+
+  it "fetches a specific customer" do
+    assert_equal client.customers.current, client.customers.get(client.customers.current.identity)
+  end
 end

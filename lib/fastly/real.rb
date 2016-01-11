@@ -19,7 +19,6 @@ class Fastly::Real
 
     @connection = Faraday.new(url: url) do |connection|
       # response
-      connection.use Faraday::Response::RaiseError
       connection.response :json, content_type: /\bjson/
 
       # request
@@ -56,16 +55,25 @@ class Fastly::Real
       "Accept"     => "application/json"
     }.merge(options[:headers] || {})
 
-    connection.send(method) do |req|
+    response = connection.send(method) do |req|
       req.url(request_url)
       req.headers.merge!(headers)
       req.params.merge!(params)
       req.body = body
     end
-  rescue Faraday::ConnectionFailed
-    raise
-  rescue Faraday::Error::ClientError => e
-    raise Fastly::Error.new(e)
+
+    Fastly::Response.new(
+      :status  => response.status,
+      :headers => response.headers,
+      :body    => response.body,
+      :request => {
+        :method  => method,
+        :url     => request_url,
+        :headers => headers,
+        :body    => body,
+        :params  => params,
+      }
+    ).raise!
   end
 
 end

@@ -18,6 +18,7 @@ class Fastly::Response
   BadRequest        = Class.new(Error)
   Conflict          = Class.new(Error)
   NotFound          = Class.new(Error)
+  Forbidden         = Class.new(Error)
   RateLimitExceeded = Class.new(Error)
   Unauthorized      = Class.new(Error)
   Unexpected        = Class.new(Error)
@@ -26,6 +27,7 @@ class Fastly::Response
   EXCEPTION_MAPPING = {
     400 => BadRequest,
     401 => Unauthorized,
+    403 => Forbidden,
     404 => NotFound,
     409 => Conflict,
     422 => Unprocessable,
