@@ -1,5 +1,8 @@
 require "fastly/version"
 
+require "logger"
+require "securerandom"
+
 require "cistern"
 require "faraday"
 require "faraday_middleware"

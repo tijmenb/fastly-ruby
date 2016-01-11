@@ -44,36 +44,4 @@ class Fastly::Real
       connection.adapter(*adapter)
     end
   end
-
-  def request(options={})
-    method      = options[:method] || :get
-    request_url = File.join(url, options.fetch(:path))
-    params      = options[:params] || {}
-    body        = options[:body]
-    headers     = {
-      "User-Agent" => Fastly::USER_AGENT,
-      "Accept"     => "application/json"
-    }.merge(options[:headers] || {})
-
-    response = connection.send(method) do |req|
-      req.url(request_url)
-      req.headers.merge!(headers)
-      req.params.merge!(params)
-      req.body = body
-    end
-
-    Fastly::Response.new(
-      :status  => response.status,
-      :headers => response.headers,
-      :body    => response.body,
-      :request => {
-        :method  => method,
-        :url     => request_url,
-        :headers => headers,
-        :body    => body,
-        :params  => params,
-      }
-    ).raise!
-  end
-
 end

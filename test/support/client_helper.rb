@@ -22,6 +22,10 @@ module ClientHelper
       raise ArgumentError, "unable to process via: #{via}"
     end
 
+    if ENV["VERBOSE"]
+      client_options.merge!(logger: Logger.new(STDOUT))
+    end
+
     client = Fastly.new(client_options)
 
     if Fastly.mocking?

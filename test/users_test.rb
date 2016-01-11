@@ -7,7 +7,7 @@ describe "Users" do
     if Fastly.mocking?
       assert_equal client.current_customer, client.customers.current
     else
-      assert_not_nil client.customers.current.identity
+      refute_nil client.customers.current.identity
     end
   end
 

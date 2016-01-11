@@ -93,12 +93,12 @@ class Fastly::Request
   end
 
   def real(params={})
-    service.request(:method => self.class.request_method,
-                    :path   => self.request_path,
-                    :body   => self.request_body,
-                    :url    => params["url"],
-                    :params => self.request_params,
-                   )
+    request(:method => self.class.request_method,
+            :path   => self.request_path,
+            :body   => self.request_body,
+            :url    => params["url"],
+            :params => self.request_params,
+           )
   end
 
   def real_request(params={})
@@ -129,40 +129,61 @@ class Fastly::Request
     end
   end
 
+  def request(options={})
+    method      = options[:method] || :get
+    params      = options[:params] || {}
+    body        = options[:body]
+
+    path        = options[:path]
+    request_url = options[:url] || url_for(path, query: params)
+
+    headers     = {
+      "User-Agent" => Fastly::USER_AGENT,
+      "Accept"     => "application/json"
+    }.merge(options[:headers] || {})
+
+    response = service.connection.send(method) do |req|
+      req.url(request_url)
+      req.headers.merge!(headers)
+      req.params.merge!(params)
+      req.body = body
+    end
+
+    Fastly::Response.new(
+      :status  => response.status,
+      :headers => response.headers,
+      :body    => response.body,
+      :request => {
+        :method  => method,
+        :url     => request_url,
+        :headers => headers,
+        :body    => body,
+        :params  => params,
+      }
+    ).raise!
+  end
+
   def response(options={})
     body   = options[:response_body] || options[:body]
     method = options[:method]        || :get
     params = options[:params]
     status = options[:status]        || 200
 
-    path = options[:path]
-    url  = options[:url] || url_for(path, query: params)
+    path        = options[:path]
+    request_url = options[:url] || url_for(path, query: params)
 
     request_headers  = {"Accept"       => "application/json"}
     response_headers = {"Content-Type" => "application/json; charset=utf-8"}
 
-    # request phase
-    # * :method - :get, :post, ...
-    # * :url    - URI for the current request; also contains GET parameters
-    # * :body   - POST parameters for :post/:put requests
-    # * :request_headers
-
-    # response phase
-    # * :status - HTTP response status code, such as 200
-    # * :body   - the response body
-    # * :response_headers
-    env = Faraday::Env.from(
-      :method           => method,
-      :url              => URI.parse(url),
-      :body             => body,
-      :request_headers  => request_headers,
-      :response_headers => response_headers,
-      :status           => status,
-    )
-
-    Faraday::Response::RaiseError.new.on_complete(env) ||
-      Faraday::Response.new(env)
-  rescue Faraday::Error::ClientError => e
-    raise Fastly::Error.new(e)
+    Fastly::Response.new(
+      :status  => status,
+      :headers => response_headers,
+      :body    => body,
+      :request => {
+        :method  => method,
+        :url     => request_url,
+        :headers => request_headers,
+      }
+    ).raise!
   end
 end
