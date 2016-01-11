@@ -113,7 +113,7 @@ class Fastly::Request
     end
   end
 
-  def mock_response(options={})
+  def response(options={})
     body   = options[:response_body] || options[:body]
     method = options[:method]        || :get
     params = options[:params]

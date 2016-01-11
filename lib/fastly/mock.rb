@@ -19,8 +19,12 @@ class Fastly::Mock
 
   attr_reader :current_customer_id
 
-  def customer=(customer)
+  def current_customer=(customer)
     @current_customer_id = customer.id
+  end
+
+  def current_customer
+    customers.new(data[:customers].fetch(current_customer_id))
   end
 
   def data

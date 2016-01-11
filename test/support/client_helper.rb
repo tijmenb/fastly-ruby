@@ -25,7 +25,7 @@ module ClientHelper
     client = Fastly.new(client_options)
 
     if Fastly.mocking?
-      client.customer = options.fetch(:customer, create_customer(client, options))
+      client.current_customer = options.fetch(:customer, create_customer(client, options))
     end
 
     client

@@ -5,7 +5,7 @@ describe "Users" do
 
   it "fetches the current customer" do
     if Fastly.mocking?
-      assert_equal client.customer, client.customers.current
+      assert_equal client.current_customer, client.customers.current
     else
       assert_not_nil client.customers.current.identity
     end
