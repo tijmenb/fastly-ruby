@@ -25,8 +25,12 @@ require "fastly/customers"
 require "fastly/get_customer"
 require "fastly/get_current_customer"
 
-require "fastly/service"
 require "fastly/get_service"
+require "fastly/get_services"
+require "fastly/create_service"
+
+require "fastly/service"
+require "fastly/services"
 require "fastly/service_version"
 
 require "fastly/real"

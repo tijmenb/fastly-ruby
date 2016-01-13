@@ -8,4 +8,12 @@ class Fastly::Service < Fastly::Model
   attribute :active_version, type: :integer
   attribute :versions, parser: ->(v,_) { Array(v).map { service.service_versions.new(v) } } # A list of versions associated with this service.
 
+  def save
+    if new_record?
+      service.create_service(name)
+    else
+      raise NotImplementedError
+    end
+  end
+
 end

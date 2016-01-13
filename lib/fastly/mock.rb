@@ -1,11 +1,18 @@
 class Fastly::Mock
 
+  KEYSPACE = (("a".."z").to_a + ("A".."Z").to_a + (0..9).map(&:to_s)).freeze
+
   def self.data
     @data ||= Hash.new { |h, url|
       h[url] = {
         :customers => {},
+        :services  => Hash.new { |h1, sid| h[sid] = {} },
       }
     }
+  end
+
+  def self.reset
+    data.clear
   end
 
   attr_reader :via, :logger, :adapter, :username, :password, :token, :url, :connection
@@ -35,7 +42,7 @@ class Fastly::Mock
     data.clear
   end
 
-  def self.reset
-    data.clear
+  def new_id
+    21.times.map { KEYSPACE[rand(KEYSPACE.size) + 1] }.join("")
   end
 end
