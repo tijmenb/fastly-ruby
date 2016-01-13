@@ -25,5 +25,9 @@ require "fastly/customers"
 require "fastly/get_customer"
 require "fastly/get_current_customer"
 
+require "fastly/service"
+require "fastly/get_service"
+require "fastly/service_version"
+
 require "fastly/real"
 require "fastly/mock"
