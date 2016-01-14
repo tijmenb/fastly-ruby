@@ -78,10 +78,6 @@ class Fastly::Request
     pluralized
   end
 
-  def data
-    self.service.data
-  end
-
   def url_for(path, options={})
     URI.parse(
       File.join(service.url, path.to_s)
@@ -122,7 +118,7 @@ class Fastly::Request
   end
 
   def find!(collection, identity, options={})
-    if resource = self.service.data[collection][identity]
+    if resource = service.data[collection][identity]
       resource
     else
       error!(options[:error] || :not_found, options)

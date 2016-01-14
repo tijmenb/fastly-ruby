@@ -43,12 +43,12 @@ module ClientHelper
     if Fastly.mocking?
       customer = {
         "can_stream_syslog"       => nil,
-        "owner_id"                => SecureRandom.uuid,
+        "owner_id"                => client.new_id,
         "can_upload_vcl"          => nil,
         "has_config_panel"        => nil,
-        "raw_api_key"             => SecureRandom.uuid,
-        "name"                    => SecureRandom.hex(6),
-        "id"                      => SecureRandom.uuid,
+        "raw_api_key"             => SecureRandom.hex(20),
+        "name"                    => client.new_id,
+        "id"                      => client.new_id,
         "can_configure_wordpress" => nil,
         "updated_at"              => Time.now.iso8601,
         "created_at"              => Time.now.iso8601,

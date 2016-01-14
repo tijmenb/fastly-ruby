@@ -1,7 +1,7 @@
 require File.expand_path("../test_helper", __FILE__)
 
 describe "Services" do
-  let(:client) { create_client }
+  let!(:client) { create_client }
 
   it "creates a service" do
     service_name = SecureRandom.hex(8)
@@ -11,10 +11,14 @@ describe "Services" do
   end
 
   describe "with a service" do
-    let(:service) { client.services.create(name: SecureRandom.hex(8)) }
+    let!(:service) { client.services.create(name: SecureRandom.hex(8)) }
 
     it "fetches the service" do
       assert_equal service, client.services.get(service.identity)
+    end
+
+    it "lists services" do
+      assert_includes client.services.all, service
     end
   end
 end

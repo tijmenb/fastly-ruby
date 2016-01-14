@@ -3,11 +3,11 @@ class Fastly::Mock
   KEYSPACE = (("a".."z").to_a + ("A".."Z").to_a + (0..9).map(&:to_s)).freeze
 
   def self.data
-    @data ||= Hash.new { |h, url|
-      h[url] = {
+    @data ||= Hash.new { |d, url|
+      d[url] = {
         :customers        => {},
-        :service_versions => {},
-        :services         => Hash.new { |h1, sid| h[sid] = {} },
+        :services         => {},
+        :service_versions => Hash.new { |sv, s| sv[s] = {} },
       }
     }
   end

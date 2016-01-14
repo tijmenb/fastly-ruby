@@ -10,7 +10,8 @@ class Fastly::Service < Fastly::Model
 
   def save
     if new_record?
-      merge_attributes(service.create_service(name).body)
+      response = service.create_service(name)
+      merge_attributes(response.body)
     else
       raise NotImplementedError
     end

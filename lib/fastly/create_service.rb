@@ -11,14 +11,14 @@ class Fastly::CreateService < Fastly::Request
     new_service = {
       "id"          => service_id,
       "name"        => name,
-      "customer_id" => service.current_customer.id,
+      "customer_id" => service.current_customer.identity,
       "comment"     => "",
       "publish_key" => service.new_id,
       "created_at"  => Time.now.iso8601.to_s,
       "updated_at"  => Time.now.iso8601.to_s,
     }
 
-    version = self.data[:service_versions][service_id][1] = {
+    version = {
       "number"     => "1",
       "backend"    => 0,
       "service_id" => service_id,
@@ -34,6 +34,7 @@ class Fastly::CreateService < Fastly::Request
       "updated_at" => Time.now.iso8601
     }
 
+    service.data[:service_versions][service_id][1] = version
     service.data[:services][service_id] = new_service
 
     mock_response(new_service.merge("versions" => [version]))
