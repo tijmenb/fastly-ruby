@@ -6,7 +6,8 @@ class Fastly::Service < Fastly::Model
   attribute :customer_id # Which customer this service belongs to.
   attribute :publish_key # What key to use for the publish streams.
   attribute :active_version, type: :integer
-  attribute :versions # A list of versions associated with this service.
+
+  attr_reader :versions
 
   def save
     if new_record?
@@ -18,7 +19,6 @@ class Fastly::Service < Fastly::Model
   end
 
   def versions=(versions)
-    attributes[:versions] =
-      Array(versions).compact.map { |version| service.service_versions.new(version) }
+    @versions = Array(versions).compact.map { |version| service.service_versions.new(version) }
   end
 end
