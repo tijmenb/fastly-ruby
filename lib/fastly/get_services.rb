@@ -3,6 +3,12 @@ class Fastly::GetServices < Fastly::Request
   request_path { |r| "/service" }
 
   def mock
-    mock_response(find!(:services))
+    services = self.data[:services].select { |service|
+      service["customer_id"] == service.current_customer.identity
+    }.map { |service|
+      service["versions"] = self.data[:service_versions][service["id"]].values
+    }
+
+    mock_response(services)
   end
 end

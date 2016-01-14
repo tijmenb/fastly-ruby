@@ -9,16 +9,16 @@ class Fastly::CreateService < Fastly::Request
     service_id = service.new_id
 
     new_service = {
-      "id": service_id,
-      "name" => name,
+      "id"          => service_id,
+      "name"        => name,
       "customer_id" => service.current_customer.id,
-      "comment" => "",
-      "publish_key" =>  service.new_id,
-      "created_at" => Time.now.iso8601.to_s,
-      "updated_at" => Time.now.iso8601.to_s,
+      "comment"     => "",
+      "publish_key" => service.new_id,
+      "created_at"  => Time.now.iso8601.to_s,
+      "updated_at"  => Time.now.iso8601.to_s,
     }
 
-    version = self.data[:versions][service_id][1] = {
+    version = self.data[:service_versions][service_id][1] = {
       "number"     => "1",
       "backend"    => 0,
       "service_id" => service_id,

@@ -32,6 +32,7 @@ require "fastly/create_service"
 require "fastly/service"
 require "fastly/services"
 require "fastly/service_version"
+require "fastly/service_versions"
 
 require "fastly/real"
 require "fastly/mock"

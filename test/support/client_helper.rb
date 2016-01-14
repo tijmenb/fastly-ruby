@@ -26,6 +26,10 @@ module ClientHelper
       client_options.merge!(logger: Logger.new(STDOUT))
     end
 
+    if ENV["FASTLY_URL"]
+      client_options.merge!(url: ENV["FASTLY_URL"])
+    end
+
     client = Fastly.new(client_options)
 
     if Fastly.mocking?
