@@ -121,7 +121,18 @@ class Fastly::Request
     if resource = service.data[collection][identity]
       resource
     else
-      error!(options[:error] || :not_found, options)
+      mock_response({
+        "msg"    => "An error occurred while connecting to the fastly API, please try your request again.",
+        "detail" => "Cannot find #{collection} '#{identity}'",
+      }, status: 400)
+    end
+  end
+
+  def delete!(collection, identity, options={})
+    if service.data[collection].delete(identity)
+      mock_response({"status" => "ok"})
+    else
+      raise NotImplementedError
     end
   end
 

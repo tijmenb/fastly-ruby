@@ -9,6 +9,12 @@ class Fastly::Service < Fastly::Model
 
   attr_reader :versions
 
+  def destroy
+    requires :identity
+
+    service.destroy_service(identity)
+  end
+
   def save
     if new_record?
       response = service.create_service(name)

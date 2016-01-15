@@ -20,5 +20,12 @@ describe "Services" do
     it "lists services" do
       assert_includes client.services.all, service
     end
+
+    it "deletes a service" do
+      service.destroy
+
+      assert_nil client.services.get(service.identity)
+      assert_nil service.reload
+    end
   end
 end

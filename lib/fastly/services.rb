@@ -12,6 +12,8 @@ class Fastly::Services < Fastly::Collection
     new(
       service.get_service(identity).body
     )
+  rescue Fastly::Response::BadRequest
+    nil
   end
 
 end
