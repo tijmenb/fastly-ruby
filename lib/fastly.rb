@@ -19,6 +19,7 @@ end
 require "fastly/token_middleware"
 require "fastly/response"
 require "fastly/request"
+require "fastly/collection"
 
 require "fastly/customer"
 require "fastly/customers"
@@ -30,6 +31,7 @@ require "fastly/get_services"
 require "fastly/create_service"
 require "fastly/destroy_service"
 require "fastly/update_service"
+require "fastly/search_services"
 
 require "fastly/service"
 require "fastly/services"

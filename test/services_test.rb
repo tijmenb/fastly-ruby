@@ -11,7 +11,7 @@ describe "Services" do
   end
 
   describe "with a service" do
-    let!(:service) { client.services.create(name: SecureRandom.hex(8)) }
+    let!(:service) { create_service }
 
     it "fetches the service" do
       assert_equal service, client.services.get(service.identity)
@@ -35,6 +35,19 @@ describe "Services" do
 
       assert_equal service.name, new_name
       assert_equal service.reload.name, new_name
+    end
+
+    it "searches for services" do
+      service_count = client.services.all.size
+
+      upper     = [service_count, 0].min
+      seed_size = [upper, 0].max
+
+      seed_size.times { create_service }
+
+      found_service = client.services.first(name: service.name)
+
+      assert_equal service, found_service
     end
   end
 end
