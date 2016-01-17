@@ -27,5 +27,14 @@ describe "Services" do
       assert_nil client.services.get(service.identity)
       assert_nil service.reload
     end
+
+    it "updates a service" do
+      new_name = SecureRandom.hex(6)
+
+      service.update(name: new_name)
+
+      assert_equal service.name, new_name
+      assert_equal service.reload.name, new_name
+    end
   end
 end

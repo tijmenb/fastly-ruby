@@ -1,0 +1,24 @@
+class Fastly::UpdateService < Fastly::Request
+
+  def self.accepted_parameters
+    %w[name comment]
+  end
+
+  request_method :put
+  request_path { |r| "/service/#{r.service_id}" }
+  request_params { |r| r.updated_attributes }
+
+  parameter :service_id
+  parameter :attributes
+
+  def updated_attributes
+    Cistern::Hash.slice(Cistern::Hash.stringify_keys(attributes), *self.class.accepted_parameters)
+  end
+
+  def mock
+    resource = find!(:services, service_id)
+    resource.merge!(request_params)
+
+    mock_response(resource)
+  end
+end

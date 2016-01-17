@@ -29,6 +29,7 @@ require "fastly/get_service"
 require "fastly/get_services"
 require "fastly/create_service"
 require "fastly/destroy_service"
+require "fastly/update_service"
 
 require "fastly/service"
 require "fastly/services"

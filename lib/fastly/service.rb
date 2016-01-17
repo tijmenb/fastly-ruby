@@ -16,12 +16,12 @@ class Fastly::Service < Fastly::Model
   end
 
   def save
-    if new_record?
-      response = service.create_service(name)
-      merge_attributes(response.body)
-    else
-      raise NotImplementedError
-    end
+    new_attributes = if new_record?
+                       service.create_service(name).body
+                     else
+                       service.update_service(identity, attributes).body
+                     end
+    merge_attributes(new_attributes)
   end
 
   def versions=(versions)
