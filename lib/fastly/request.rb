@@ -22,7 +22,10 @@ class Fastly::Request
   def self.parameter(name)
     parameters << name
 
-    attr_reader name
+    define_method(name) {
+      val = instance_variable_get("@#{name}")
+      val.nil? ? raise(ArgumentError, "#{name} is required") : val
+    }
   end
 
   attr_reader :params
