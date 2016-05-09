@@ -1,5 +1,4 @@
 module ClientHelper
-
   def create_client(options={})
     via = options[:via] || :token
     client_options = {}
@@ -64,7 +63,6 @@ module ClientHelper
       raise NotImplementedError
     end
   end
-
 end
 
 Minitest::Spec.send(:include, ClientHelper)
