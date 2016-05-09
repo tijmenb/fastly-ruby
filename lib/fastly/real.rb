@@ -18,8 +18,6 @@ class Fastly::Real
     @adapter ||= Faraday.default_adapter
 
     @connection = Faraday.new(url: url) do |connection|
-      # response
-      connection.response :json, content_type: /\bjson/
 
       # request
       connection.request :multipart
@@ -40,6 +38,9 @@ class Fastly::Real
       if logger
         connection.response :detailed_logger, logger
       end
+
+      # response
+      connection.response :json, content_type: /\bjson/
 
       connection.adapter(*adapter)
     end
