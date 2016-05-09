@@ -23,7 +23,7 @@ RSpec.describe "Services" do
     it "deletes a service" do
       service.destroy
       expect(client.services.get service.identity).to be_nil
-      expect(service.reload).to be_nil
+      expect(client.services).not_to include(service)
     end
 
     it "updates a service" do
