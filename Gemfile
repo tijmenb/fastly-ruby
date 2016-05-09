@@ -5,8 +5,6 @@ gemspec
 
 group :test do
   gem "awesome_print", "~> 1.0"
-  gem "minitest", "~> 5.0"
-  gem "minitest-reporters", "~> 1.1"
-  gem "minitest-bang"
+  gem "rspec", "~> 3.2"
   gem "pry-nav"
 end

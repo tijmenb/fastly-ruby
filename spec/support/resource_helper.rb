@@ -6,4 +6,4 @@ module ServiceHelper
   end
 end
 
-Minitest::Spec.send(:include, ServiceHelper)
+RSpec.configure { |config| config.include(ServiceHelper) }

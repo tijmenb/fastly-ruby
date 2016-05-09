@@ -65,4 +65,4 @@ module ClientHelper
   end
 end
 
-Minitest::Spec.send(:include, ClientHelper)
+RSpec.configure { |config| config.include(ClientHelper) }
