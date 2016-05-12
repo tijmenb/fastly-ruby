@@ -1,4 +1,4 @@
-class Fastly::ServiceVersion < Fastly::Model
+class Fastly::Version < Fastly::Model
 
   identity :id, alias: "number", type: :integer
 

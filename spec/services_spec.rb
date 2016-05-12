@@ -10,7 +10,7 @@ RSpec.describe "Services" do
   end
 
   describe "with a service" do
-    let!(:service) { create_service }
+    let!(:service) { a_service }
 
     it "fetches the service" do
       expect(client.services.get service.identity).to eq(service)
@@ -22,7 +22,7 @@ RSpec.describe "Services" do
 
     it "deletes a service" do
       service.destroy
-      expect(client.services.get service.identity).to be_nil
+      expect(client.services.get(service.identity).deleted_at).not_to be_nil
       expect(client.services).not_to include(service)
     end
 

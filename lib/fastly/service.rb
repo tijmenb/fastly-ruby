@@ -2,17 +2,21 @@ class Fastly::Service < Fastly::Model
 
   identity :id
 
-  attribute :name # The name of this service.
-  attribute :customer_id # Which customer this service belongs to.
-  attribute :publish_key # What key to use for the publish streams.
   attribute :active_version, type: :integer
-
-  attr_reader :versions
+  attribute :created_at, type: :time
+  attribute :customer_id # Which customer this service belongs to.
+  attribute :deleted_at, type: :time
+  attribute :name # The name of this service.
+  attribute :publish_key # What key to use for the publish streams.
+  attribute :updated_at, type: :time
+  attribute :versions, type: :array
+  attribute :version, type: :integer
 
   def destroy
     requires :identity
 
-    service.destroy_service(identity)
+    new_attributes = service.destroy_service(identity).body
+    merge_attributes(new_attributes)
   end
 
   def save
@@ -25,6 +29,8 @@ class Fastly::Service < Fastly::Model
   end
 
   def versions=(versions)
-    @versions = Array(versions).compact.map { |version| service.service_versions.new(version) }
+    attributes[:versions] = versions.map do |version|
+      version.respond_to?(:attributes) ? version : service.versions.new(version)
+    end
   end
 end

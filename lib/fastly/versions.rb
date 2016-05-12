@@ -1,6 +1,6 @@
-class Fastly::ServiceVersions < Fastly::Collection
+class Fastly::Versions < Fastly::Collection
 
-  model Fastly::ServiceVersion
+  model Fastly::Version
 
   def all(service_id)
     load(
