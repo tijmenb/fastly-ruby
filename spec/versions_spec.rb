@@ -4,9 +4,10 @@ RSpec.describe "Versions" do
   let!(:service) { a_service }
 
   it "creates a version" do
+    latest = service.versions.last
     version = service.versions.create
 
-    ap version
+    expect(version.number).to eq(latest.number + 1)
   end
 
   #describe "with a service" do
