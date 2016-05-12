@@ -1,4 +1,10 @@
+require 'rspec/core/shared_context'
+
 module ClientHelper
+  extend RSpec::Core::SharedContext
+
+  let(:client) { create_client }
+
   def create_client(options={})
     via = options[:via] || :token
     client_options = {}
@@ -65,4 +71,6 @@ module ClientHelper
   end
 end
 
-RSpec.configure { |config| config.include(ClientHelper) }
+RSpec.configure do |config|
+  config.include(ClientHelper)
+end
