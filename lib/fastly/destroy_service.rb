@@ -5,6 +5,9 @@ class Fastly::DestroyService < Fastly::Request
   parameter :service_id
 
   def mock
-    delete!(:services, service_id)
+    service = find!(:services, service_id)
+    service["deleted_at"] = Time.now.iso8601
+
+    response(body: { "status" => "ok"})
   end
 end
