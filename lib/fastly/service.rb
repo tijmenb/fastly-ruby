@@ -29,8 +29,8 @@ class Fastly::Service < Fastly::Model
   end
 
   def versions=(versions)
-    attributes[:versions] = versions.map do |version|
-      version.respond_to?(:attributes) ? version : service.versions.new(version)
-    end
+    attributes[:versions] = service.versions(service_id: identity).load(versions.map do |version|
+      version.respond_to?(:attributes) ? version.attributes : version
+    end)
   end
 end

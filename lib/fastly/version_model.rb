@@ -29,6 +29,8 @@ class Fastly::Version < Fastly::Model
   attribute :vcls,             type: :array
   attribute :wordpress,        type: :array
 
+  alias cistern service
+
   def service
     @service ||= client.services.get(service_id)
   end
@@ -36,6 +38,15 @@ class Fastly::Version < Fastly::Model
   def reload
     @service = nil
     super
+  end
+
+  def save
+    new_attributes = if new_record?
+                       cistern.create_version(service_id, attributes).body
+                     else
+                       cistern.update_version(identity, attributes).body
+                     end
+    merge_attributes(new_attributes)
   end
 
 end

@@ -37,6 +37,7 @@ require "fastly/service"
 require "fastly/services"
 require "fastly/version_model"
 require "fastly/versions"
+require "fastly/create_version"
 
 require "fastly/real"
 require "fastly/mock"
