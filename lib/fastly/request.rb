@@ -196,4 +196,8 @@ class Fastly::Request
       }
     ).raise!
   end
+
+  def updated_attributes
+    Cistern::Hash.slice(Cistern::Hash.stringify_keys(attributes), *self.class.accepted_parameters)
+  end
 end

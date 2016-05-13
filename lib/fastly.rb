@@ -40,6 +40,7 @@ require "fastly/versions"
 require "fastly/create_version"
 require "fastly/get_versions"
 require "fastly/get_version"
+require "fastly/update_version"
 
 require "fastly/real"
 require "fastly/mock"

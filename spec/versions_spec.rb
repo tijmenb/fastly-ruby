@@ -21,18 +21,14 @@ RSpec.describe "Versions" do
       expect(client.versions(service_id: a_version.service_id)).to include(version)
     end
 
-    #it "deletes a service" do
-      #service.destroy
-      #expect(client.services.get(service.identity).deleted_at).not_to be_nil
-      #expect(client.services).not_to include(service)
-    #end
+    it "updates a version" do
+      comment = SecureRandom.hex(6)
 
-    #it "updates a service" do
-      #new_name = SecureRandom.hex(6)
-      #service.update(name: new_name)
-      #expect(new_name).to eq(service.name)
-      #expect(new_name).to eq(service.reload.name)
-    #end
+      version.update(comment: comment)
+
+      expect(version.comment).to eq(comment)
+      expect(version.reload.comment).to eq(comment)
+    end
 
     #it "searches for services" do
       #service_count = client.services.all.size

@@ -29,25 +29,38 @@ class Fastly::Version < Fastly::Model
   attribute :vcls,             type: :array
   attribute :wordpress,        type: :array
 
-  alias cistern service
+  attr_reader :cistern
 
   def service
-    @service ||= client.services.get(service_id)
+    @_service ||= begin
+                    requires :service_id
+
+                    cistern.services.get(service_id)
+                  end
   end
 
   def reload
     requires :service_id, :identity
-    @service = nil
-    merge_attributes(cistern.versions(service_id: service_id).get(identity).attributes)
+    @_service = nil
+    merge_attributes(
+      cistern.versions(service_id: service_id).get(identity).attributes
+    )
   end
 
   def save
     new_attributes = if new_record?
                        cistern.create_version(service_id, attributes).body
                      else
-                       cistern.update_version(identity, attributes).body
+                       cistern.update_version(service_id, number, attributes).body
                      end
     merge_attributes(new_attributes)
+  end
+
+  private
+
+  def merge_attributes(new_attributes={})
+    @cistern ||= new_attributes.delete(:service)
+    super(new_attributes)
   end
 
 end
