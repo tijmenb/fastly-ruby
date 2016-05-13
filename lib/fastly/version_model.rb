@@ -36,8 +36,9 @@ class Fastly::Version < Fastly::Model
   end
 
   def reload
+    requires :service_id, :identity
     @service = nil
-    super
+    merge_attributes(cistern.versions(service_id: service_id).get(identity).attributes)
   end
 
   def save

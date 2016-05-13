@@ -1,21 +1,21 @@
 require 'spec_helper'
 
 RSpec.describe "Versions" do
-  let!(:service) { a_service }
-
   it "creates a version" do
+    service = a_service
     latest = service.versions.last
     version = service.versions.create
 
     expect(version.number).to eq(latest.number + 1)
   end
 
-  #describe "with a service" do
-    #let!(:service) { a_service }
+  describe "with a version" do
+    let!(:version) { a_version }
+    let!(:service) { version.service }
 
-    #it "fetches the service" do
-      #expect(client.services.get service.identity).to eq(service)
-    #end
+    it "fetches the version" do
+      expect(client.versions(service_id: version.service_id).get(version.identity)).to eq(version)
+    end
 
     #it "lists services" do
       #expect(client.services).to include(service)
@@ -42,5 +42,5 @@ RSpec.describe "Versions" do
       #found_service = client.services.first(name: service.name)
       #expect(found_service).to eq(service)
     #end
-  #end
+  end
 end

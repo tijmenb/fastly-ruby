@@ -36,6 +36,10 @@ module ServiceHelper
 
     cached_service || create_service(options)
   end
+
+  def a_version(options={})
+    a_service.versions.sample
+  end
 end
 
 RSpec.configure do |config|
