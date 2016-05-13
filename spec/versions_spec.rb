@@ -17,9 +17,9 @@ RSpec.describe "Versions" do
       expect(client.versions(service_id: version.service_id).get(version.identity)).to eq(version)
     end
 
-    #it "lists services" do
-      #expect(client.services).to include(service)
-    #end
+    it "lists versions" do
+      expect(client.versions(service_id: a_version.service_id)).to include(version)
+    end
 
     #it "deletes a service" do
       #service.destroy
