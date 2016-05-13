@@ -85,7 +85,9 @@ class Fastly::Request
     URI.parse(
       File.join(service.url, path.to_s)
     ).tap do |uri|
-      if query = options[:query]
+      query = options[:query]
+
+      if query && query.any?
         uri.query = Faraday::NestedParamsEncoder.encode(query)
       end
     end.to_s

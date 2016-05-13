@@ -12,10 +12,4 @@ class Fastly::Customers < Fastly::Collection
     )
   end
 
-  def get(identity)
-    new(
-      service.get_customer(identity).body
-    )
-  end
-
 end

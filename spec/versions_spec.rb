@@ -29,14 +29,5 @@ RSpec.describe "Versions" do
       expect(version.comment).to eq(comment)
       expect(version.reload.comment).to eq(comment)
     end
-
-    #it "searches for services" do
-      #service_count = client.services.all.size
-      #upper = [service_count, 0].min
-      #seed_size = [upper, 0].max
-      #seed_size.times { create_service }
-      #found_service = client.services.first(name: service.name)
-      #expect(found_service).to eq(service)
-    #end
   end
 end

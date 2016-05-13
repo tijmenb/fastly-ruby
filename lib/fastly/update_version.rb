@@ -1,7 +1,7 @@
 class Fastly::UpdateVersion < Fastly::Request
 
   request_method :put
-  request_path { |r| "/service/#{r.service_id}" }
+  request_path { |r| "/service/#{r.service_id}/version/#{r.number}" }
   request_params { |r| r.updated_attributes }
 
   parameter :service_id
