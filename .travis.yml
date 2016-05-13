@@ -2,7 +2,10 @@ language: ruby
 script: 'bundle exec rake test'
 sudo: false
 rvm:
-  - '1.9'
-  - '2.1'
-  - '2.2'
   - '2.3'
+notifications:
+  email: false
+branches:
+  except:
+    - /^v\d+/
+cache: bundler
