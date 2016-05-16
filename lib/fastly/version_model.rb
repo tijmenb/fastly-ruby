@@ -31,10 +31,20 @@ class Fastly::Version < Fastly::Model
 
   attr_reader :cistern
 
+  has_many :domains, -> { cistern.domains(service_id: service_id, version: number) }
+  has_many :backends, -> { cistern.backends(service_id: service_id, version: number) }
+
   def activate!
     requires :service_id, :number
 
     response = cistern.activate_version(service_id, number)
+    merge_attributes(response.body)
+  end
+
+  def deactivate!
+    requires :service_id, :number
+
+    response = cistern.deactivate_version(service_id, number)
     merge_attributes(response.body)
   end
 
@@ -61,26 +71,6 @@ class Fastly::Version < Fastly::Model
                        cistern.update_version(service_id, number, attributes).body
                      end
     merge_attributes(new_attributes)
-  end
-
-  def backends
-    attributes[:backends] || cistern.backends(service_id: identity, version: number)
-  end
-
-  def domains
-    attributes[:domains] || cistern.domains(service_id: identity, version: number)
-  end
-
-  def backends=(backends)
-    attributes[:backends] = cistern.backends(service_id: identity, version: number).load(
-      backends.map { |backend| backend.respond_to?(:attributes) ? backend.attributes : backend }
-    )
-  end
-
-  def domains=(domains)
-    attributes[:domains] = cistern.domains(service_id: identity, version: number).load(
-      domains.map { |domain| domain.respond_to?(:attributes) ? domain.attributes : domain }
-    )
   end
 
   private

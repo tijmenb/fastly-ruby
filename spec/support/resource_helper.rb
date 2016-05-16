@@ -59,6 +59,10 @@ module ServiceHelper
     version = service.versions.sample
     version.backends.create(name: service.name)
     version.domains.create(name: service.name)
+    activate = options.delete(:active)
+    version.activate! if activate
+    version.deactivate! if false == activate
+    version.update(options) if options.any?
 
     version
   end

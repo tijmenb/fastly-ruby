@@ -3,13 +3,13 @@ class Fastly::Backends < Fastly::Collection
   model Fastly::Backend
 
   attribute :service_id
-  attribute :version
+  attribute :version, type: :integer
 
   def all
     requires :service_id, :version
 
     load(
-      service.get_backends(service_id).body
+      service.get_backends(service_id, version).body
     )
   end
 
@@ -17,7 +17,7 @@ class Fastly::Backends < Fastly::Collection
     requires :service_id, :version
 
     new(
-      service.get_backend(service_id, identity).body
+      service.get_backend(service_id, version, identity).body
     )
   end
 
@@ -25,6 +25,10 @@ class Fastly::Backends < Fastly::Collection
     attributes[:service_id] ||= service_id
     attributes[:version] ||= version
     super
+  end
+
+  def create(**attributes)
+    new(attributes).tap(&:create)
   end
 
 end

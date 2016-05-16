@@ -122,14 +122,15 @@ class Fastly::Request
     )
   end
 
-  def find!(collection, identity, options={})
-    if resource = service.data[collection][identity]
+  def find!(collection, *identities, **options)
+    if resource = service.data[collection].dig(*identities)
       resource
     else
+      identifier = identities.map(&:to_s).join(',')
       mock_response({
-        "msg"    => "An error occurred while connecting to the fastly API, please try your request again.",
-        "detail" => "Cannot find #{collection} '#{identity}'",
-      }, status: 400)
+        "msg"    => "Record not found",
+        "detail" => "Cannot find #{collection.to_s.capitalize} [#{identifier}]'",
+      }, status: 404)
     end
   end
 

@@ -19,16 +19,17 @@ class Fastly::Domain < Fastly::Model
     )
   end
 
+  def create
+    requires :service_id, :version_number, :name
+
+    response = cistern.create_domain(service_id, version_number, attributes)
+    merge_attributes(response.body)
+  end
+
   def save
-    new_attributes = if new_record?
-                       requires :service_id, :version, :name
+    requires :service_id, :version_number, :identity
 
-                       cistern.create_domain(service_id, version_number, attributes).body
-                     else
-                       requires :service_id, :version, :identity
-
-                       cistern.update_domain(service_id, version_number, name, attributes).body
-                     end
-    merge_attributes(new_attributes)
+    response = cistern.update_domain(service_id, version_number, name, attributes)
+    merge_attributes(response.body)
   end
 end

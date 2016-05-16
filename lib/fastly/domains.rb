@@ -27,4 +27,8 @@ class Fastly::Domains < Fastly::Collection
     super
   end
 
+  def create(**attributes)
+    new(attributes).tap(&:create)
+  end
+
 end

@@ -36,11 +36,8 @@ class Fastly::Backend < Fastly::Model
   attribute :version_number, type: :integer, alias: "version" # The current version number of a service.
   attribute :weight, type: :integer                           # Weight used to load balance this backend against others.
 
-  has_many :backends, -> { cistern.backends(service_id: identity, version: number) }
-  has_many :domains, -> { cistern.domains(service_id: identity, version: number) }
-
   def reload
-    requires :service_id, :version, :identity
+    requires :service_id, :version_number, :identity
 
     @_service = nil
     @_version = nil
@@ -50,37 +47,18 @@ class Fastly::Backend < Fastly::Model
     )
   end
 
+  def create
+    requires :service_id, :version_number, :name
+
+    response = cistern.create_backend(service_id, version_number, attributes)
+    merge_attributes(response.body)
+  end
+
   def save
-    new_attributes = if new_record?
-                       requires :service_id, :version, :name
+    requires :service_id, :version_number, :identity
 
-                       cistern.create_backend(service_id, version_number, attributes).body
-                     else
-                       requires :service_id, :version, :identity
-
-                       cistern.update_backend(service_id, version_number, name, attributes).body
-                     end
-    merge_attributes(new_attributes)
-  end
-
-  def backends
-    attributes[:backends] || cistern.backends(service_id: identity, version: number)
-  end
-
-  def domains
-    attributes[:domains] || cistern.domains(service_id: identity, version: number)
-  end
-
-  def backends=(backends)
-    attributes[:backends] = cistern.backends(service_id: identity, version: number).load(
-      backends.map { |backend| backend.respond_to?(:attributes) ? backend.attributes : backend }
-    )
-  end
-
-  def domains=(domains)
-    attributes[:domains] = cistern.domains(service_id: identity, version: number).load(
-      domains.map { |domain| domain.respond_to?(:attributes) ? domain.attributes : domain }
-    )
+    response = cistern.update_backend(service_id, version_number, name, attributes)
+    merge_attributes(response.body)
   end
 
 end

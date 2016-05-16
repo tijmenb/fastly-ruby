@@ -5,9 +5,11 @@ class Fastly::Mock
   def self.data
     @data ||= Hash.new { |d, url|
       d[url] = {
+        :backends         => Hash.new { |sv, s| sv[s] = Hash.new { |vb, b| vb[b] = {} } },
         :customers        => {},
-        :services         => {},
+        :domains          => Hash.new { |sv, s| sv[s] = Hash.new { |vb, b| vb[b] = {} } },
         :service_versions => Hash.new { |sv, s| sv[s] = {} },
+        :services         => {},
       }
     }
   end
