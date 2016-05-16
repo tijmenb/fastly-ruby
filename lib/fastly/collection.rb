@@ -1,9 +1,9 @@
 class Fastly::Collection
-  def first(*args)
-    all(*args).records.first
+  def first(**query)
+    query.empty? ? super() : all(query).first
   end
 
-  def last(*args)
-    all(*args).records.last
+  def last(**query)
+    query.empty? ? super() : all(query).last
   end
 end

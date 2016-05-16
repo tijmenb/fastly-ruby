@@ -19,6 +19,7 @@ RSpec.describe "Services" do
     end
 
     it "deletes a service" do
+      service.versions.each { |v| v.active? && v.deactivate! }
       service.destroy
       expect(client.services.get(service.identity).deleted_at).not_to be_nil
       expect(client.services).not_to include(service)

@@ -3,7 +3,6 @@ class Fastly::Version < Fastly::Model
   identity :id, alias: "number", type: :integer
 
   attribute :active,           type: :boolean # Whether this is the active version or not.
-  attribute :backends,         type: :array
   attribute :cache_settings,   type: :array
   attribute :comment
   attribute :conditions,       type: :array
@@ -11,7 +10,6 @@ class Fastly::Version < Fastly::Model
   attribute :deleted_at,       type: :time
   attribute :deployed,         type: :boolean
   attribute :directors,        type: :array
-  attribute :domains,          type: :array
   attribute :gzips,            type: :array
   attribute :headers,          type: :array
   attribute :healthchecks,     type: :array

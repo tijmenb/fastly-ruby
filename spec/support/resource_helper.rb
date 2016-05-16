@@ -57,7 +57,7 @@ module ServiceHelper
     return matching_version if matching_version
 
     version = service.versions.sample
-    version.backends.create(name: service.name)
+    version.backends.create(name: service.name, hostname: "#{SecureRandom.hex(3)}.example.com")
     version.domains.create(name: service.name)
     activate = options.delete(:active)
     version.activate! if activate

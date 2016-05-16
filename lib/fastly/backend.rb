@@ -50,6 +50,8 @@ class Fastly::Backend < Fastly::Model
   def create
     requires :service_id, :version_number, :name
 
+    requires_one :address, :ipv4, :ipv6, :hostname
+
     response = cistern.create_backend(service_id, version_number, attributes)
     merge_attributes(response.body)
   end

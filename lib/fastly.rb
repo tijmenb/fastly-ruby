@@ -21,7 +21,7 @@ require "fastly/response"
 require "fastly/request"
 require "fastly/collection"
 require "fastly/service_version_model"
-require "fastly/model"
+require "fastly/association"
 
 require "fastly/customer"
 require "fastly/customers"
@@ -62,3 +62,5 @@ require "fastly/update_domain"
 
 require "fastly/real"
 require "fastly/mock"
+
+Fastly.setup

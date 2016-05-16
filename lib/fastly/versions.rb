@@ -21,8 +21,7 @@ class Fastly::Versions < Fastly::Collection
   end
 
   def new(attributes={})
-    attributes[:service_id] ||= service_id
+    attributes["service_id"] ||= service_id if service_id
     super
   end
-
 end

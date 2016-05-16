@@ -9,7 +9,6 @@ class Fastly::Service < Fastly::Model
   attribute :name # The name of this service.
   attribute :publish_key # What key to use for the publish streams.
   attribute :updated_at, type: :time
-  attribute :versions, type: :array
   attribute :version, type: :integer
 
   has_many :versions, -> { service.versions(service_id: identity) }
