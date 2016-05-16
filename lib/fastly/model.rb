@@ -1,11 +1,14 @@
 class Fastly::Model
-  def self.has_many(name, block)
-    define_method name do
-      attributes[name] || instance_exec(&block)
+  def self.has_many(name, scope)
+    reader_method = name
+    writer_method = "#{name}="
+
+    define_method reader_method do
+      attributes[name] || instance_exec(&scope)
     end
 
-    define_method name do |models|
-      attributes[name] ||= instance_exec(&block).load(
+    define_method writer_method do |models|
+      attributes[name] ||= instance_exec(&scope).load(
         models.map { |model| model.respond_to?(:attributes) ? model.attributes : model }
       )
     end

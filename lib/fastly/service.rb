@@ -12,6 +12,8 @@ class Fastly::Service < Fastly::Model
   attribute :versions, type: :array
   attribute :version, type: :integer
 
+  has_many :versions, -> { service.versions(service_id: identity) }
+
   def destroy
     requires :identity
 
@@ -26,11 +28,5 @@ class Fastly::Service < Fastly::Model
                        service.update_service(identity, attributes).body
                      end
     merge_attributes(new_attributes)
-  end
-
-  def versions=(versions)
-    attributes[:versions] = service.versions(service_id: identity).load(versions.map do |version|
-      version.respond_to?(:attributes) ? version.attributes : version
-    end)
   end
 end
