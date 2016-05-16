@@ -37,8 +37,30 @@ module ServiceHelper
     cached_service || create_service(options)
   end
 
-  def a_version(options={})
-    a_service.versions.sample
+  def a_version(**options)
+    service = options.delete(:service) || a_service
+    return service.versions.sample if options.empty?
+
+    matching_version = service.versions.find do |version|
+      options.all? { |k,v| v == version.attributes[k] }
+    end
+    matching_version || service.versions.create(options)
+  end
+
+  def viable_version(**options)
+    service = options.delete(:service) || a_service
+    matching_version = service.versions.find { |version|
+      version.backends.any? && version.domains.any? &&
+        options.all? { |k,v| v == version.attributes[k] }
+    }
+
+    return matching_version if matching_version
+
+    version = service.versions.sample
+    version.backends.create(name: service.name)
+    version.domains.create(name: service.name)
+
+    version
   end
 end
 

@@ -30,4 +30,28 @@ RSpec.describe "Versions" do
       expect(version.reload.comment).to eq(comment)
     end
   end
+
+  describe "with a deactivated version" do
+    let!(:version) { viable_version(active: false) }
+
+    it "activates" do
+      expect {
+        version.activate!
+      }.to change(version, :active).from(false).to(true)
+
+      expect(version.reload).to be_active
+    end
+  end
+
+  describe "with an activated version" do
+    let!(:version) { viable_version(active: true) }
+
+    it "deactivates" do
+      expect {
+        version.deactivate!
+      }.to change(version, :active).from(true).to(false)
+
+      expect(version.reload).not_to be_active
+    end
+  end
 end
