@@ -54,6 +54,13 @@ class Fastly::Version
     cistern.versions(service_id: service_id).new(response.body)
   end
 
+  def lock!
+    requires :service_id, :number
+
+    response = cistern.lock_version(service_id, number)
+    merge_attributes(response.body)
+  end
+
   def validate
     requires :service_id, :number
 

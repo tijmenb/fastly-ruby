@@ -51,6 +51,18 @@ RSpec.describe "Versions" do
     end
   end
 
+  describe "with an unlocked version" do
+    let!(:version) { viable_version(locked: false) }
+
+    it "activates" do
+      expect {
+        version.lock!
+      }.to change(version, :locked).from(false).to(true)
+
+      expect(version.reload).to be_locked
+    end
+  end
+
   describe "with a deactivated version" do
     let!(:version) { viable_version(active: false) }
 

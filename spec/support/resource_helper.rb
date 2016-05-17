@@ -50,7 +50,7 @@ module ServiceHelper
   def viable_version(**options)
     service = options.delete(:service) || a_service
     matching_version = service.versions.find { |version|
-      version.backends.any? && version.domains.any? &&
+      version.backends.any? && version.domains.any? && !version.locked
         options.all? { |k,v| v == version.attributes[k] }
     }
 
