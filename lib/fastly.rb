@@ -43,6 +43,7 @@ require "fastly/get_version"
 require "fastly/update_version"
 require "fastly/activate_version"
 require "fastly/deactivate_version"
+require "fastly/clone_version"
 require "fastly/version_model"
 require "fastly/versions"
 

@@ -29,6 +29,14 @@ RSpec.describe "Versions" do
       expect(version.comment).to eq(comment)
       expect(version.reload.comment).to eq(comment)
     end
+
+    it "clones a version" do
+      expected_number = service.versions.map(&:number).max + 1
+      new_version = version.clone!
+
+      expect(new_version.number).to eq(expected_number)
+      expect(new_version.service).to eq(service)
+    end
   end
 
   describe "with a deactivated version" do

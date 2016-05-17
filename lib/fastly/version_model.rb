@@ -47,6 +47,13 @@ class Fastly::Version
     merge_attributes(response.body)
   end
 
+  def clone!
+    requires :service_id, :number
+
+    response = cistern.clone_version(service_id, number)
+    cistern.versions(service_id: service_id).new(response.body)
+  end
+
   def service
     @_service ||= begin
                     requires :service_id
