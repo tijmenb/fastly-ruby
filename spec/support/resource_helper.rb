@@ -58,7 +58,7 @@ module ServiceHelper
 
     version = service.versions.sample
     version.backends.create(name: service.name, hostname: "#{SecureRandom.hex(3)}.example.com")
-    version.domains.create(name: service.name)
+    version.domains.create(name: "#{SecureRandom.hex(3)}.example-#{SecureRandom.hex(3)}.com")
     activate = options.delete(:active)
     version.activate! if activate
     version.deactivate! if false == activate

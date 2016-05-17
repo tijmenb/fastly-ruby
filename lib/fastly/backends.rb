@@ -4,28 +4,26 @@ class Fastly::Backends
   model Fastly::Backend
 
   attribute :service_id
-  attribute :version, type: :integer
+  attribute :version_number, type: :integer
 
   def all
-    requires :service_id, :version
+    requires :service_id, :version_number
 
     load(
-      cistern.get_backends(service_id, version).body
+      cistern.get_backends(service_id, version_number).body
     )
   end
 
   def get(identity)
-    requires :service_id, :version
+    requires :service_id, :version_number
 
     new(
-      cistern.get_backend(service_id, version, identity).body
+      cistern.get_backend(service_id, version, version_number).body
     )
   end
 
-  def new(attributes={})
-    attributes[:service_id] ||= service_id
-    attributes[:version] ||= version
-    super
+  def new(new_attributes={})
+    super(attributes.merge(new_attributes))
   end
 
   def create(**attributes)

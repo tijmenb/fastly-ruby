@@ -28,8 +28,8 @@ class Fastly::Version
   attribute :vcls,             type: :array
   attribute :wordpress,        type: :array
 
-  has_many :domains, -> { cistern.domains(service_id: service_id, version: number) }
-  has_many :backends, -> { cistern.backends(service_id: service_id, version: number) }
+  has_many :domains, -> { cistern.domains(service_id: service_id, version_number: number) }
+  has_many :backends, -> { cistern.backends(service_id: service_id, version_number: number) }
 
   ignore_attributes :service
 
@@ -67,7 +67,7 @@ class Fastly::Version
     new_attributes = if new_record?
                        cistern.create_version(service_id, attributes).body
                      else
-                       cistern.update_version(service_id, number, attributes).body
+                       cistern.update_version(service_id, number, dirty_attributes).body
                      end
     merge_attributes(new_attributes)
   end

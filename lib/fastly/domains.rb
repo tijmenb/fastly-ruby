@@ -4,28 +4,26 @@ class Fastly::Domains
   model Fastly::Domain
 
   attribute :service_id
-  attribute :version
+  attribute :version_number
 
   def all
-    requires :service_id, :version
+    requires :service_id, :version_number
 
     load(
-      cistern.get_domains(service_id).body
+      cistern.get_domains(service_id, version_number).body
     )
   end
 
   def get(identity)
-    requires :service_id, :version
+    requires :service_id, :version_number
 
     new(
-      cistern.get_domains(service_id, identity).body
+      cistern.get_domains(service_id, version_number).body
     )
   end
 
-  def new(attributes={})
-    attributes[:service_id] ||= service_id
-    attributes[:version] ||= version
-    super
+  def new(new_attributes={})
+    super(attributes.merge(new_attributes))
   end
 
   def create(**attributes)
