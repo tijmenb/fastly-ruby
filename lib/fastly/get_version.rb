@@ -1,4 +1,5 @@
-class Fastly::GetVersion < Fastly::Request
+class Fastly::GetVersion
+  include Fastly::Request
   request_method :get
   request_path { |r| "/service/#{r.service_id}/version/#{r.number}" }
 
@@ -8,7 +9,7 @@ class Fastly::GetVersion < Fastly::Request
   def mock
     find!(:services, service_id)
 
-    version = service.data[:service_versions][service_id].fetch(number.to_i)
+    version = cistern.data[:service_versions][service_id].fetch(number.to_i)
 
     mock_response(version)
   end

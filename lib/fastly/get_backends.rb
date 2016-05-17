@@ -1,4 +1,5 @@
-class Fastly::GetBackends < Fastly::Request
+class Fastly::GetBackends
+  include Fastly::Request
   request_method :get
   request_path { |r| "/service/#{r.service_id}/version/#{r.number}/backend" }
 
@@ -6,6 +7,6 @@ class Fastly::GetBackends < Fastly::Request
   parameter :number
 
   def mock
-    mock_response(service.data.dig(:backends, service_id, number.to_i) || [])
+    mock_response(cistern.data.dig(:backends, service_id, number.to_i) || [])
   end
 end

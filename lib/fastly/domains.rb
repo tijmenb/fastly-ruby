@@ -1,4 +1,5 @@
-class Fastly::Domains < Fastly::Collection
+class Fastly::Domains
+  include Fastly::Collection
 
   model Fastly::Domain
 
@@ -9,7 +10,7 @@ class Fastly::Domains < Fastly::Collection
     requires :service_id, :version
 
     load(
-      service.get_domains(service_id).body
+      cistern.get_domains(service_id).body
     )
   end
 
@@ -17,7 +18,7 @@ class Fastly::Domains < Fastly::Collection
     requires :service_id, :version
 
     new(
-      service.get_domains(service_id, identity).body
+      cistern.get_domains(service_id, identity).body
     )
   end
 

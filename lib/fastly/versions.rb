@@ -1,4 +1,5 @@
-class Fastly::Versions < Fastly::Collection
+class Fastly::Versions
+  include Fastly::Collection
 
   model Fastly::Version
 
@@ -8,7 +9,7 @@ class Fastly::Versions < Fastly::Collection
     requires :service_id
 
     load(
-      service.get_versions(service_id).body
+      cistern.get_versions(service_id).body
     )
   end
 
@@ -16,7 +17,7 @@ class Fastly::Versions < Fastly::Collection
     requires :service_id
 
     new(
-      service.get_version(service_id, identity).body
+      cistern.get_version(service_id, identity).body
     )
   end
 

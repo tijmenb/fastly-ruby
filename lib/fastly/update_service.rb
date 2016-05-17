@@ -1,4 +1,5 @@
-class Fastly::UpdateService < Fastly::Request
+class Fastly::UpdateService
+  include Fastly::Request
 
   def self.accepted_parameters
     %w[name comment]

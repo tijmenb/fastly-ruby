@@ -1,4 +1,5 @@
-class Fastly::Domain < Fastly::Model
+class Fastly::Domain
+  include Fastly::Model
   include Fastly::ServiceVersionModel
 
   identity :id, alias: 'name', type: :string

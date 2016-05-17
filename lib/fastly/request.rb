@@ -1,31 +1,45 @@
-class Fastly::Request
-  def self.request_method(request_method=nil)
-    @request_method ||= request_method
+module Fastly::Request
+
+  class << self
+    alias cistern_included included
   end
 
-  def self.request_params(&block)
-    @request_params ||= block
+  def self.included(receiver)
+    cistern_included(receiver)
+    receiver.extend(ClassMethods)
+    super
   end
 
-  def self.request_body(&block)
-    @request_body ||= block
-  end
+  module ClassMethods
 
-  def self.request_path(&block)
-    @request_path ||= block
-  end
+    def request_method(request_method=nil)
+      @request_method ||= request_method
+    end
 
-  def self.parameters
-    @parameters ||= []
-  end
+    def request_params(&block)
+      @request_params ||= block
+    end
 
-  def self.parameter(name)
-    parameters << name
+    def request_body(&block)
+      @request_body ||= block
+    end
 
-    define_method(name) {
-      val = instance_variable_get("@#{name}")
-      val.nil? ? raise(ArgumentError, "#{name} is required") : val
-    }
+    def request_path(&block)
+      @request_path ||= block
+    end
+
+    def parameters
+      @parameters ||= []
+    end
+
+    def parameter(name)
+      parameters << name
+
+      define_method(name) {
+        val = instance_variable_get("@#{name}")
+        val.nil? ? raise(ArgumentError, "#{name} is required") : val
+      }
+    end
   end
 
   attr_reader :params
@@ -83,7 +97,7 @@ class Fastly::Request
 
   def url_for(path, options={})
     URI.parse(
-      File.join(service.url, path.to_s)
+      File.join(cistern.url, path.to_s)
     ).tap do |uri|
       query = options[:query]
 
@@ -123,7 +137,7 @@ class Fastly::Request
   end
 
   def find!(collection, *identities, **options)
-    if resource = service.data[collection].dig(*identities)
+    if resource = cistern.data[collection].dig(*identities)
       resource
     else
       identifier = identities.map(&:to_s).join(',')
@@ -135,7 +149,7 @@ class Fastly::Request
   end
 
   def delete!(collection, identity, options={})
-    if service.data[collection].delete(identity)
+    if cistern.data[collection].delete(identity)
       mock_response({"status" => "ok"})
     else
       raise NotImplementedError
@@ -155,7 +169,7 @@ class Fastly::Request
       "Accept"     => "application/json"
     }.merge(options[:headers] || {})
 
-    response = service.connection.send(method) do |req|
+    response = cistern.connection.send(method) do |req|
       req.url(request_url)
       req.headers.merge!(headers)
       req.params.merge!(params)

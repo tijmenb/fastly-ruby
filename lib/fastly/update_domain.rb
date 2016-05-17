@@ -1,4 +1,5 @@
-class Fastly::UpdateDomain < Fastly::Request
+class Fastly::UpdateDomain
+  include Fastly::Request
 
   ACCEPTED_PARAMETERS = %w[ name comment ].freeze
 

@@ -1,4 +1,5 @@
-class Fastly::Customer < Fastly::Model
+class Fastly::Customer
+  include Fastly::Model
 
   identity :id
 

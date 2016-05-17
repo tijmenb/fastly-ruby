@@ -1,4 +1,5 @@
-class Fastly::CreateService < Fastly::Request
+class Fastly::CreateService
+  include Fastly::Request
   request_method :post
   request_path { |r| "/service" }
   request_params { |r| { "name" => r.name } }
@@ -6,14 +7,14 @@ class Fastly::CreateService < Fastly::Request
   parameter :name
 
   def mock
-    service_id = service.new_id
+    service_id = cistern.new_id
 
     new_service = {
       "id"          => service_id,
       "name"        => name,
-      "customer_id" => service.current_customer.identity,
+      "customer_id" => cistern.current_customer.identity,
       "comment"     => "",
-      "publish_key" => service.new_id,
+      "publish_key" => cistern.new_id,
       "created_at"  => Time.now.iso8601.to_s,
       "updated_at"  => Time.now.iso8601.to_s,
     }
@@ -34,8 +35,8 @@ class Fastly::CreateService < Fastly::Request
       "updated_at" => Time.now.iso8601
     }
 
-    service.data[:service_versions][service_id][1] = version
-    service.data[:services][service_id] = new_service
+    cistern.data[:service_versions][service_id][1] = version
+    cistern.data[:services][service_id] = new_service
 
     mock_response(new_service.merge("versions" => [version]))
   end

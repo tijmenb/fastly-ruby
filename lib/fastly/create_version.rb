@@ -1,4 +1,5 @@
-class Fastly::CreateVersion < Fastly::Request
+class Fastly::CreateVersion
+  include Fastly::Request
   request_method :post
   request_path { |r| "/service/#{r.service_id}/version" }
   request_params { |r| r.updated_attributes }
@@ -16,9 +17,9 @@ class Fastly::CreateVersion < Fastly::Request
 
   def mock
     find!(:services, service_id)
-    latest_version = service.data[:service_versions][service_id].values.last.dup
+    latest_version = cistern.data[:service_versions][service_id].values.last.dup
     number = latest_version["number"] = (latest_version["number"].to_i + 1).to_s
-    service.data[:service_versions][service_id][number] = latest_version.merge!(updated_attributes)
+    cistern.data[:service_versions][service_id][number] = latest_version.merge!(updated_attributes)
 
     mock_response(latest_version)
   end

@@ -1,4 +1,5 @@
-class Fastly::CreateDomain < Fastly::Request
+class Fastly::CreateDomain
+  include Fastly::Request
 
   ACCEPTED_PARAMETERS = %w[ name comment ].freeze
 
@@ -17,7 +18,7 @@ class Fastly::CreateDomain < Fastly::Request
   def mock
     find!(:service_versions, service_id, number.to_i)
 
-    domain = service.data[:domains][service_id][number.to_i][updated_attributes.fetch("name")] = updated_attributes
+    domain = cistern.data[:domains][service_id][number.to_i][updated_attributes.fetch("name")] = updated_attributes
 
     mock_response(domain)
   end

@@ -16,12 +16,4 @@ module Fastly::ServiceVersionModel
                     cistern.versions(service_id: service_id).get(version_number)
                   end
   end
-
-  protected
-
-  def merge_attributes(new_attributes={})
-    @cistern ||= new_attributes.delete(:service)
-    super(new_attributes)
-  end
-
 end

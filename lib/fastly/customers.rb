@@ -1,4 +1,5 @@
-class Fastly::Customers < Fastly::Collection
+class Fastly::Customers
+  include Fastly::Collection
 
   model Fastly::Customer
 
@@ -8,7 +9,7 @@ class Fastly::Customers < Fastly::Collection
 
   def current
     new(
-      service.get_current_customer.body
+      cistern.get_current_customer.body
     )
   end
 

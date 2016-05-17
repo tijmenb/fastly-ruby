@@ -1,4 +1,5 @@
-class Fastly::Service < Fastly::Model
+class Fastly::Service
+  include Fastly::Model
 
   identity :id
 
@@ -6,25 +7,25 @@ class Fastly::Service < Fastly::Model
   attribute :created_at, type: :time
   attribute :customer_id # Which customer this service belongs to.
   attribute :deleted_at, type: :time
-  attribute :name # The name of this service.
+  attribute :name # The name of this cistern.
   attribute :publish_key # What key to use for the publish streams.
   attribute :updated_at, type: :time
   attribute :version, type: :integer
 
-  has_many :versions, -> { service.versions(service_id: identity) }
+  has_many :versions, -> { cistern.versions(service_id: identity) }
 
   def destroy
     requires :identity
 
-    new_attributes = service.destroy_service(identity).body
+    new_attributes = cistern.destroy_service(identity).body
     merge_attributes(new_attributes)
   end
 
   def save
     new_attributes = if new_record?
-                       service.create_service(name).body
+                       cistern.create_service(name).body
                      else
-                       service.update_service(identity, attributes).body
+                       cistern.update_service(identity, attributes).body
                      end
     merge_attributes(new_attributes)
   end

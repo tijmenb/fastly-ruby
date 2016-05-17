@@ -1,4 +1,5 @@
-class Fastly::Backends < Fastly::Collection
+class Fastly::Backends
+  include Fastly::Collection
 
   model Fastly::Backend
 
@@ -9,7 +10,7 @@ class Fastly::Backends < Fastly::Collection
     requires :service_id, :version
 
     load(
-      service.get_backends(service_id, version).body
+      cistern.get_backends(service_id, version).body
     )
   end
 
@@ -17,7 +18,7 @@ class Fastly::Backends < Fastly::Collection
     requires :service_id, :version
 
     new(
-      service.get_backend(service_id, version, identity).body
+      cistern.get_backend(service_id, version, identity).body
     )
   end
 

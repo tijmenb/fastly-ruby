@@ -9,7 +9,7 @@ require "faraday_middleware"
 require "faraday/detailed_logger"
 
 module Fastly
-  include Cistern::Client
+  include Cistern::Client.with(interface: :module)
 
   USER_AGENT = "Fastly/#{Fastly::VERSION} Ruby/#{RUBY_VERSION} (#{RUBY_PLATFORM}; #{RUBY_ENGINE}"
 
@@ -21,7 +21,7 @@ require "fastly/response"
 require "fastly/request"
 require "fastly/collection"
 require "fastly/service_version_model"
-require "fastly/association"
+require "fastly/model"
 
 require "fastly/customer"
 require "fastly/customers"
@@ -62,5 +62,3 @@ require "fastly/update_domain"
 
 require "fastly/real"
 require "fastly/mock"
-
-Fastly.setup

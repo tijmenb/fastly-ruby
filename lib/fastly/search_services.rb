@@ -1,4 +1,5 @@
-class Fastly::SearchServices < Fastly::Request
+class Fastly::SearchServices
+  include Fastly::Request
 
   def self.search_params
     %w[name]
@@ -15,10 +16,10 @@ class Fastly::SearchServices < Fastly::Request
   end
 
   def mock
-    matched_service = service.data[:services].values.find { |s| Cistern::Hash.slice(s, *search_params.keys) == search_params }
+    matched_service = cistern.data[:services].values.find { |s| Cistern::Hash.slice(s, *search_params.keys) == search_params }
 
-    matched_service["customer_id"] == service.current_customer.identity
-    matched_service["versions"] = service.data[:service_versions][matched_service["id"].to_i].values
+    matched_service["customer_id"] == cistern.current_customer.identity
+    matched_service["versions"] = cistern.data[:service_versions][matched_service["id"].to_i].values
 
     mock_response(matched_service)
   end

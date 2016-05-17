@@ -1,4 +1,6 @@
-class Fastly::GetCustomer < Fastly::Request
+class Fastly::GetCustomer
+  include Fastly::Request
+
   request_method :get
   request_path { |r| "/customer/#{r.customer_id}" }
 

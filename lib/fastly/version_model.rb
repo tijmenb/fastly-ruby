@@ -1,4 +1,5 @@
-class Fastly::Version < Fastly::Model
+class Fastly::Version
+  include Fastly::Model
 
   identity :id, alias: "number", type: :integer
 
@@ -27,10 +28,10 @@ class Fastly::Version < Fastly::Model
   attribute :vcls,             type: :array
   attribute :wordpress,        type: :array
 
-  attr_reader :cistern
-
   has_many :domains, -> { cistern.domains(service_id: service_id, version: number) }
   has_many :backends, -> { cistern.backends(service_id: service_id, version: number) }
+
+  ignore_attributes :service
 
   def activate!
     requires :service_id, :number
@@ -69,13 +70,6 @@ class Fastly::Version < Fastly::Model
                        cistern.update_version(service_id, number, attributes).body
                      end
     merge_attributes(new_attributes)
-  end
-
-  private
-
-  def merge_attributes(new_attributes={})
-    @cistern ||= new_attributes.delete(:service)
-    super(new_attributes)
   end
 
 end

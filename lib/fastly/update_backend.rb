@@ -1,4 +1,5 @@
-class Fastly::UpdateBackend < Fastly::Request
+class Fastly::UpdateBackend
+  include Fastly::Request
 
   ACCEPTED_PARAMETERS =
     %w[ address auto_loadbalance between_bytes_timeout client_cert comment connect_timeout error_threshold first_byte_timeout

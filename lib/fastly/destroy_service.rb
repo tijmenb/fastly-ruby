@@ -1,4 +1,5 @@
-class Fastly::DestroyService < Fastly::Request
+class Fastly::DestroyService
+  include Fastly::Request
   request_method :delete
   request_path { |r| "/service/#{r.service_id}" }
 

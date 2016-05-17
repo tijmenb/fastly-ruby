@@ -1,4 +1,5 @@
-class Fastly::GetService < Fastly::Request
+class Fastly::GetService
+  include Fastly::Request
   request_method :get
   request_path { |r| "/service/#{r.service_id}" }
 

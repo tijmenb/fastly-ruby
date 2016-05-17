@@ -1,4 +1,5 @@
-class Fastly::CreateBackend < Fastly::Request
+class Fastly::CreateBackend
+  include Fastly::Request
 
   ACCEPTED_PARAMETERS =
     %w[ address auto_loadbalance between_bytes_timeout client_cert comment connect_timeout error_threshold first_byte_timeout
@@ -22,7 +23,7 @@ class Fastly::CreateBackend < Fastly::Request
   def mock
     find!(:service_versions, service_id, number.to_i)
 
-    backend = service.data[:backends][service_id][number.to_i][updated_attributes.fetch("name")] = updated_attributes
+    backend = cistern.data[:backends][service_id][number.to_i][updated_attributes.fetch("name")] = updated_attributes
 
     mock_response(backend)
   end

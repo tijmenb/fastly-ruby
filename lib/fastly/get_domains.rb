@@ -1,4 +1,5 @@
-class Fastly::GetDomains < Fastly::Request
+class Fastly::GetDomains
+  include Fastly::Request
   request_method :get
   request_path { |r| "/service/#{r.service_id}/version/#{r.number}/domain" }
 
@@ -6,6 +7,6 @@ class Fastly::GetDomains < Fastly::Request
   parameter :number
 
   def mock
-    mock_response(service.data.dig(:domains, service_id, number.to_i) || [])
+    mock_response(cistern.data.dig(:domains, service_id, number.to_i) || [])
   end
 end

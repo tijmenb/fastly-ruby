@@ -1,4 +1,5 @@
-class Fastly::Backend < Fastly::Model
+class Fastly::Backend
+  include Fastly::Model
   include Fastly::ServiceVersionModel
 
   identity :id, alias: "name", type: :string

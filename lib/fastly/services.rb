@@ -1,12 +1,13 @@
-class Fastly::Services < Fastly::Collection
+class Fastly::Services
+  include Fastly::Collection
 
   model Fastly::Service
 
   def all(options={})
     resources = if options.empty?
-                  service.get_services.body
+                  cistern.get_services.body
                 else
-                  [service.search_services(options).body]
+                  [cistern.search_services(options).body]
                 end
 
     load(resources)
@@ -14,7 +15,7 @@ class Fastly::Services < Fastly::Collection
 
   def get(identity)
     new(
-      service.get_service(identity).body
+      cistern.get_service(identity).body
     )
   rescue Fastly::Response::BadRequest
     nil

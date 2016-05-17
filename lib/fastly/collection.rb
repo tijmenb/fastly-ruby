@@ -1,4 +1,4 @@
-class Fastly::Collection
+module Fastly::Collection
   def first(**query)
     query.empty? ? super() : all(query).first
   end

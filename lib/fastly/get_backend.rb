@@ -1,4 +1,5 @@
-class Fastly::GetBackend < Fastly::Request
+class Fastly::GetBackend
+  include Fastly::Request
   request_method :get
   request_path { |r| "/service/#{r.service_id}/version/#{r.number}/backend/#{r.name}" }
 
