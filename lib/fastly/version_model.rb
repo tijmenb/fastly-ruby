@@ -54,6 +54,14 @@ class Fastly::Version
     cistern.versions(service_id: service_id).new(response.body)
   end
 
+  def validate
+    requires :service_id, :number
+
+    data = cistern.validate_version(service_id, number).body
+    return [true, nil] if data["status"] == "ok"
+    return [false, data["msg"]]
+  end
+
   def service
     @_service ||= begin
                     requires :service_id

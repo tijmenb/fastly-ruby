@@ -37,6 +37,18 @@ RSpec.describe "Versions" do
       expect(new_version.number).to eq(expected_number)
       expect(new_version.service).to eq(service)
     end
+
+    it "validates a version" do
+      response = version.validate
+
+      expected_response = if version.domains.none?
+                         [false, "Version has no associated domains"]
+                       else
+                         [true, nil]
+                       end
+
+      expect(response).to eq(expected_response)
+    end
   end
 
   describe "with a deactivated version" do
