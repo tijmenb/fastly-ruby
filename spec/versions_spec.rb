@@ -10,7 +10,7 @@ RSpec.describe "Versions" do
   end
 
   describe "with a version" do
-    let!(:version) { a_version }
+    let!(:version) { a_version(locked: false) }
     let!(:service) { version.service }
 
     it "fetches the version" do
